@@ -1,0 +1,8 @@
+# 덱편집기에 필요한 꾸러미 (모두 무료·상업 사용 가능)
+python-pptx>=1.0      # MIT  - PPTX 쓰기·읽기
+lxml>=5.0             # BSD  - python-pptx 가 씀
+Pillow>=10.0          # HPND - 그림
+numpy>=1.24           # BSD  - 16-bit 그림 미리보기
+pypdfium2>=4.30       # Apache-2.0 / BSD-3 - PDF 쪽 그림·글
+XlsxWriter>=3.0       # BSD-2 - python-pptx 기본 차트 안의 엑셀 데이터
+openpyxl>=3.1         # MIT  - 엑셀 재료 읽기

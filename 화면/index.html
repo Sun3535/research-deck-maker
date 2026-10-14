@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>덱편집기</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/장.css">
+<link rel="stylesheet" href="/화면/app.css">
+</head>
+<body>
+<header class="윗줄">
+  <div class="로고"><span class="점"></span>덱편집기</div>
+  <div class="덱이름" id="덱이름">덱을 여는 중…</div>
+  <div class="상태" id="상태"></div>
+  <button class="큰단추" id="빨리굽기" title="고칠 수 있는 PPTX로 바로 굽기">PPTX 굽기</button>
+</header>
+<main class="판">
+  <nav class="레일" id="레일"></nav>
+  <section class="패널" id="패널"></section>
+  <section class="가운데">
+    <div class="무대" id="무대"><div class="장틀 큰장" id="큰장"></div></div>
+    <div class="띠" id="띠"></div>
+  </section>
+  <aside class="살피기" id="살피기"></aside>
+</main>
+<div class="알림" id="알림" role="status"></div>
+<script src="/화면/app.js"></script>
+</body>
+</html>

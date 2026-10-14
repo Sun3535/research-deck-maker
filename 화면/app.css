@@ -1,0 +1,125 @@
+/* 덱편집기 화면: 캡컷처럼 어두운 판, 타일로 고른다 */
+:root{
+  --바탕:#0f1012; --판:#17181c; --칸:#1e2026; --칸2:#262931; --선:#2c2f37;
+  --글:#ecedf0; --흐림:#9aa0aa; --강조:#3ddbd9; --강조글:#05211f; --경고:#ff6b6b; --주의:#ffc552;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--바탕);color:var(--글);
+  font:14px/1.45 "Malgun Gothic","맑은 고딕",Pretendard,system-ui,sans-serif}
+button{font:inherit;color:inherit;cursor:pointer}
+input,textarea,select{font:inherit;color:var(--글);background:var(--칸2);border:1px solid var(--선);
+  border-radius:8px;padding:8px 10px;width:100%}
+textarea{resize:vertical;min-height:96px}
+input:focus,textarea:focus{outline:2px solid var(--강조);outline-offset:-1px;border-color:transparent}
+
+.윗줄{height:52px;display:flex;align-items:center;gap:16px;padding:0 16px;border-bottom:1px solid var(--선);background:var(--판)}
+.로고{font-weight:700;display:flex;align-items:center;gap:8px;letter-spacing:-.2px}
+.로고 .점{width:14px;height:14px;border-radius:4px;background:linear-gradient(135deg,var(--강조),#7c8cff)}
+.덱이름{font-weight:600;color:var(--글)}
+.상태{color:var(--흐림);font-size:12px;margin-right:auto}
+.큰단추{background:var(--강조);color:var(--강조글);border:0;border-radius:8px;padding:8px 14px;font-weight:700}
+.큰단추:hover{filter:brightness(1.08)}
+.큰단추:disabled{opacity:.5;cursor:wait}
+
+.판{display:grid;grid-template-columns:72px 296px minmax(0,1fr) 320px;height:calc(100% - 52px)}
+.레일{background:var(--판);border-right:1px solid var(--선);display:flex;flex-direction:column;padding:8px 0;gap:2px}
+.레일 button{background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:10px 0;color:var(--흐림);font-size:12px;border-left:3px solid transparent}
+.레일 button svg{width:22px;height:22px}
+.레일 button:hover{color:var(--글)}
+.레일 button[aria-selected=true]{color:var(--강조);border-left-color:var(--강조);background:rgba(61,219,217,.06)}
+.레일 button.곧{opacity:.45}
+
+.패널{background:var(--판);border-right:1px solid var(--선);overflow:auto;padding:16px}
+.패널 h2{font-size:15px;margin:0 0 4px}
+.패널 .설명{color:var(--흐림);font-size:12px;margin:0 0 14px}
+.타일들{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.타일들.한줄{grid-template-columns:1fr}
+.타일{background:var(--칸);border:1px solid var(--선);border-radius:10px;padding:8px;text-align:left;
+  display:flex;flex-direction:column;gap:6px;transition:border-color .12s,transform .12s}
+.타일:hover{border-color:#4a4f5a;transform:translateY(-1px)}
+.타일[aria-pressed=true]{border-color:var(--강조);box-shadow:0 0 0 1px var(--강조) inset}
+.타일 .이름{font-weight:600;font-size:13px}
+.타일 .작은{color:var(--흐림);font-size:11px}
+.타일 .그림칸{aspect-ratio:16/9;border-radius:6px;overflow:hidden;background:#000;position:relative}
+.타일 .그림칸 img{width:100%;height:100%;object-fit:cover;display:block}
+.배치그림{aspect-ratio:16/9;border-radius:6px;background:#2a2d35;position:relative;overflow:hidden}
+.배치그림 i{position:absolute;background:#5d6370;border-radius:2px}
+.배치그림 i.강{background:var(--강조)}
+.배치그림 i.그{background:#41465a;border:1px dashed #6d7486}
+
+.가운데{display:grid;grid-template-rows:minmax(0,1fr) 148px;min-width:0}
+.무대{display:flex;align-items:center;justify-content:center;padding:28px;min-height:0;
+  background:radial-gradient(ellipse at center,#1b1d22 0%,var(--바탕) 70%)}
+.장틀{position:relative;aspect-ratio:16/9;overflow:hidden;background:#000}
+.장틀>.장{position:absolute;left:0;top:0;transform-origin:0 0}
+.큰장{width:100%;max-height:100%;border-radius:6px;box-shadow:0 10px 40px rgba(0,0,0,.55)}
+.무대 .큰장{width:min(100%, calc((100vh - 52px - 148px - 56px) * 16 / 9))}
+.띠{border-top:1px solid var(--선);background:var(--판);display:flex;gap:10px;padding:14px 16px;overflow-x:auto;align-items:center}
+.띠 .작은장{flex:0 0 176px;position:relative;cursor:pointer;border-radius:6px;outline:2px solid transparent;outline-offset:2px}
+.띠 .작은장[aria-current=true]{outline-color:var(--강조)}
+.띠 .작은장 .번호{position:absolute;left:6px;top:6px;z-index:2;background:rgba(0,0,0,.65);color:#fff;
+  font-size:11px;border-radius:4px;padding:1px 6px}
+.띠 .작은장 .넘침표{position:absolute;right:6px;top:6px;z-index:2;background:var(--경고);color:#fff;font-size:11px;border-radius:4px;padding:1px 6px}
+.띠 .작은장.끌림{opacity:.4}
+.띠 .작은장.놓을곳{outline-color:var(--주의)}
+.띠 .더하기{flex:0 0 100px;height:99px;border:1px dashed #4a4f5a;border-radius:6px;background:none;color:var(--흐림);font-size:28px}
+.띠 .더하기:hover{color:var(--강조);border-color:var(--강조)}
+
+.살피기{background:var(--판);border-left:1px solid var(--선);overflow:auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+.살피기 h3{margin:0;font-size:14px;display:flex;align-items:center;gap:8px}
+.꼬리표{font-size:11px;background:var(--칸2);border:1px solid var(--선);border-radius:999px;padding:2px 8px;color:var(--흐림)}
+.칸이름{display:flex;justify-content:space-between;font-size:12px;color:var(--흐림);margin-bottom:6px}
+.칸이름 .넘음{color:var(--경고);font-weight:700}
+.넘침알림{background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.4);color:#ffb3b3;border-radius:8px;padding:8px 10px;font-size:12px}
+.그림고르기{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.그림고르기 button{padding:0;border:1px solid var(--선);border-radius:6px;overflow:hidden;background:#000;aspect-ratio:1}
+.그림고르기 button[aria-pressed=true]{outline:2px solid var(--강조);outline-offset:1px}
+.그림고르기 img{width:100%;height:100%;object-fit:cover;display:block}
+.그림고르기 .없음{background:var(--칸2);color:var(--흐림);font-size:12px}
+.줄단추{display:flex;gap:8px}
+.작은단추{background:var(--칸2);border:1px solid var(--선);border-radius:8px;padding:7px 10px;font-size:12px}
+.작은단추:hover{border-color:#4a4f5a}
+.결과{display:flex;flex-direction:column;gap:6px;margin-top:14px}
+.결과 a{color:var(--강조);text-decoration:none;background:var(--칸);border:1px solid var(--선);border-radius:8px;padding:8px 10px;display:flex;justify-content:space-between}
+.결과 a:hover{border-color:var(--강조)}
+.빈칸{color:var(--흐림);font-size:13px;padding:24px 8px;text-align:center}
+#알림{position:fixed;left:50%;bottom:170px;transform:translateX(-50%);background:#2b2e36;border:1px solid var(--선);
+  padding:10px 16px;border-radius:10px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:10}
+#알림.보임{opacity:1}
+#알림.오류{border-color:var(--경고);color:#ffc9c9}
+pre.설계글{font:12px/1.5 ui-monospace,Consolas,monospace;background:var(--칸);border:1px solid var(--선);border-radius:8px;padding:10px;white-space:pre-wrap;max-height:50vh;overflow:auto}
+
+/* 재료 */
+.놓는곳{display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center;text-align:center;
+  border:1.5px dashed #4a4f5a;border-radius:12px;padding:20px 12px;cursor:pointer;background:var(--칸)}
+.놓는곳:hover,.놓는곳.위{border-color:var(--강조);background:rgba(61,219,217,.06)}
+.재료카드{background:var(--칸);border:1px solid var(--선);border-radius:12px;padding:12px;margin-bottom:12px;display:flex;flex-direction:column;gap:8px}
+.재료머리{display:flex;gap:8px;align-items:center;min-width:0}
+.재료머리 b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.소제목{font-size:12px;font-weight:700;color:var(--흐림);margin-top:4px}
+.쪽띠{display:flex;gap:6px;overflow-x:auto}
+.쪽띠 img{height:84px;border-radius:4px;border:1px solid var(--선);background:#fff}
+.글덩어리들{display:flex;flex-direction:column;gap:6px;max-height:260px;overflow:auto}
+.글덩어리{display:flex;gap:8px;align-items:flex-start;font-size:12px;background:var(--칸2);border-radius:8px;padding:6px 8px;cursor:pointer}
+.글덩어리 input{width:auto;margin-top:2px}
+.글덩어리 em{color:var(--강조);font-style:normal;margin-right:4px}
+.표줄{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:12px;flex-wrap:wrap}
+.표줄 .작은단추{margin-left:4px}
+.작은단추.고르기[aria-pressed=true]{border-color:var(--강조);color:var(--강조)}
+select{appearance:auto}
+.줄단추 input{flex:1;min-width:0}
+.줄단추 button{white-space:nowrap}
+label.타일{cursor:pointer}
+.그림고르기 .차례{position:absolute;left:4px;top:4px;background:var(--강조);color:var(--강조글);font-size:11px;font-weight:700;border-radius:4px;padding:0 5px}
+/* 감독관 */
+.레일 button{position:relative}
+.레일표{position:absolute;top:4px;right:10px;font-size:10px;font-weight:700;border-radius:999px;padding:0 5px;color:#fff;background:var(--주의)}
+.레일표.멈춤{background:var(--경고)}
+.감독목록{display:flex;flex-direction:column;gap:6px;margin:6px 0 12px}
+.감독줄{background:var(--칸);border:1px solid var(--선);border-left:3px solid var(--흐림);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:6px;font-size:12px}
+.감독줄.멈춤{border-left-color:var(--경고)}
+.감독줄.주의{border-left-color:var(--주의)}
+.감독줄 .작은단추{padding:3px 8px;font-size:11px}
+.결과 .작은{word-break:break-all}

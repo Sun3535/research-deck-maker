@@ -1,0 +1,896 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "덱설계.schema.json",
+ "title": "덱설계",
+ "description": "덱편집기가 받는 발표 덱 설계. 덱설계_쓰는법.md 를 함께 본다.",
+ "type": "object",
+ "required": [
+  "이름",
+  "장"
+ ],
+ "properties": {
+  "이름": {
+   "type": "string",
+   "description": "덱 이름(결과 파일 이름)"
+  },
+  "스타일": {
+   "description": "스타일 이름 또는 해부로 만든 스타일 사전",
+   "anyOf": [
+    {
+     "enum": [
+      "단정",
+      "어둠",
+      "종이",
+      "새벽",
+      "숲",
+      "모노",
+      "코랄",
+      "보라",
+      "강철",
+      "학회"
+     ]
+    },
+    {
+     "type": "string"
+    },
+    {
+     "type": "object"
+    }
+   ]
+  },
+  "글자체": {
+   "type": "string",
+   "description": "기본 '맑은 고딕'"
+  },
+  "발표분": {
+   "type": "number",
+   "description": "발표 시간(분). 감독관이 장 수를 살핀다"
+  },
+  "장시간": {
+   "type": "number",
+   "description": "영상에서 한 장 기본 초(기본 5)"
+  },
+  "꾸밈": {
+   "type": "object",
+   "additionalProperties": false,
+   "properties": {
+    "배경": {
+     "enum": [
+      "없음",
+      "구석빛",
+      "아래띠",
+      "점무늬"
+     ]
+    },
+    "사진": {
+     "enum": [
+      "없음",
+      "흑백",
+      "옅게"
+     ]
+    },
+    "테두리": {
+     "enum": [
+      "없음",
+      "얇게",
+      "강조"
+     ]
+    },
+    "그림자": {
+     "enum": [
+      "없음",
+      "부드럽게"
+     ]
+    },
+    "모서리": {
+     "enum": [
+      "그대로",
+      "둥글게",
+      "각지게"
+     ]
+    }
+   }
+  },
+  "바탕": {
+   "type": "object",
+   "description": "v1 PPTX 바탕(앱이 채운다)"
+  },
+  "감독관무시": {
+   "type": "array",
+   "items": {
+    "type": "object"
+   }
+  },
+  "휴지통": {
+   "type": "array",
+   "items": {
+    "type": "object"
+   }
+  },
+  "장": {
+   "type": "array",
+   "minItems": 1,
+   "items": {
+    "oneOf": [
+     {
+      "title": "표지",
+      "description": "덱의 첫 장. 큰 제목과 날짜·발표자",
+      "type": "object",
+      "properties": {
+       "종류": {
+        "const": "표지"
+       },
+       "노트": {
+        "type": "string",
+        "description": "발표자 노트(대본.md에 모인다)"
+       },
+       "시간": {
+        "type": "number",
+        "minimum": 1,
+        "description": "영상에서 이 장을 보여 줄 초"
+       },
+       "큰말": {
+        "type": "string",
+        "description": "큰말 (한 줄 30자 안)"
+       },
+       "작은말": {
+        "type": "string",
+        "description": "작은말 (한 줄 50자 안)"
+       },
+       "발표자": {
+        "type": "string",
+        "description": "발표자 (한 줄 40자 안)"
+       },
+       "그림": {
+        "type": "string",
+        "description": "그림 경로(프로젝트 폴더 기준, 예: 재료/003_SEM/그림/SEM.tif)"
+       },
+       "맞춤": {
+        "enum": [
+         "담기",
+         "채우기"
+        ],
+        "description": "맞춤"
+       }
+      },
+      "required": [
+       "종류",
+       "큰말"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "title": "한마디",
+      "description": "한 문장으로 말하는 장",
+      "type": "object",
+      "properties": {
+       "종류": {
+        "const": "한마디"
+       },
+       "노트": {
+        "type": "string",
+        "description": "발표자 노트(대본.md에 모인다)"
+       },
+       "시간": {
+        "type": "number",
+        "minimum": 1,
+        "description": "영상에서 이 장을 보여 줄 초"
+       },
+       "큰말": {
+        "type": "string",
+        "description": "큰말 (한 줄 36자 안)"
+       },
+       "작은말": {
+        "type": "string",
+        "description": "작은말 (한 줄 60자 안)"
+       }
+      },
+      "required": [
+       "종류",
+       "큰말"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "title": "글그림",
+      "description": "왼쪽 글, 오른쪽 그림",
+      "type": "object",
+      "properties": {
+       "종류": {
+        "const": "글그림"
+       },
+       "노트": {
+        "type": "string",
+        "description": "발표자 노트(대본.md에 모인다)"
+       },
+       "시간": {
+        "type": "number",
+        "minimum": 1,
+        "description": "영상에서 이 장을 보여 줄 초"
+       },
+       "제목": {
+        "type": "string",
+        "description": "제목 (한 줄 28자 안)"
+       },
+       "글": {
+        "description": "글 (한 줄 40자 안), 4줄까지",
+        "anyOf": [
+         {
+          "type": "array",
+          "items": {
+           "type": "string"
+          }
+         },
+         {
+          "type": "string"
+         }
+        ]
+       },
+       "그림": {
+        "type": "string",
+        "description": "그림 경로(프로젝트 폴더 기준, 예: 재료/003_SEM/그림/SEM.tif)"
+       },
+       "그림설명": {
+        "type": "string",
+        "description": "그림설명 (한 줄 50자 안)"
+       }
+      },
+      "required": [
+       "종류",
+       "제목"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "title": "원본장",
+      "description": "바탕 PPTX(v1)의 장을 그대로. 글만 고칠 수 있어요",
+      "type": "object",
+      "properties": {
+       "종류": {
+        "const": "원본장"
+       },
+       "노트": {
+        "type": "string",
+        "description": "발표자 노트(대본.md에 모인다)"
+       },
+       "시간": {
+        "type": "number",
+        "minimum": 1,
+        "description": "영상에서 이 장을 보여 줄 초"
+       },
+       "고침": {
+        "type": "object",
+        "additionalProperties": {
+         "type": "string"
+        },
+        "description": "v1 글상자 아이디 → 새 글"
+       },
+       "원본": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "v1의 몇 번째 장"
+       }
+      },
+      "required": [
+       "종류"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "title": "글만",
+      "description": "제목과 요점만. 회의록 내용 옮기기에 좋아요",
+      "type": "object",
+      "properties": {
+       "종류": {
+        "const": "글만"
+       },
+       "노트": {
+        "type": "string",
+        "description": "발표자 노트(대본.md에 모인다)"
+       },
+       "시간": {
+        "type": "number",
+        "minimum": 1,
+        "description": "영상에서 이 장을 보여 줄 초"
+       },
+       "제목": {
+        "type": "string",
+        "description": "제목 (한 줄 28자 안)"
+       },
+       "글": {
+        "description": "글 (한 줄 60자 안), 6줄까지",
+        "anyOf": [
+         {
+          "type": "array",
+          "items": {
+           "type": "string"
+          }
+         },
+         {
+          "type": "string"
+         }
+        ]
+       }
+      },
+      "required": [
+       "종류",
+       "제목"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "title": "도표",
+      "description": "엑셀 데이터로 그린 그래프. PPTX에서는 고칠 수 있는 차트",
+      "type": "object",
+      "properties": {
+       "종류": {
+        "const": "도표"
+       },
+       "노트": {
+        "type": "string",
+        "description": "발표자 노트(대본.md에 모인다)"
+       },
+       "시간": {
+        "type": "number",
+        "minimum": 1,
+        "description": "영상에서 이 장을 보여 줄 초"
+       },
+       "제목": {
+        "type": "string",
+        "description": "제목 (한 줄 28자 안)"
+       },
+       "표": {
+        "type": "string",
+        "description": "표 경로(재료/NNN_이름/표/<이름>.json)"
+       },
+       "모양": {
+        "enum": [
+         "막대",
+         "선",
+         "점"
+        ],
+        "description": "모양"
+       },
+       "설명": {
+        "type": "string",
+        "description": "설명 (한 줄 60자 안)"
+       },
+       "축0": {
+        "type": "boolean",
+        "description": "축을 0에서 시작(막대는 늘 참)"
+       },
+       "합100": {
+        "type": "boolean",
+        "description": "줄마다 합이 100이어야 함(비율)"
+       },
+       "가로": {
+        "type": "string",
+        "description": "가로축으로 쓸 열 이름(기본: 첫 열)"
+       },
+       "세로": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        },
+        "description": "그릴 열 이름들(기본: 숫자 열 전부)"
+       },
+       "단위": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "종류",
+       "제목"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "title": "표",
+      "description": "엑셀 표를 그대로. PPTX에서는 고칠 수 있는 표",
+      "type": "object",
+      "properties": {
+       "종류": {
+        "const": "표"
+       },
+       "노트": {
+        "type": "string",
+        "description": "발표자 노트(대본.md에 모인다)"
+       },
+       "시간": {
+        "type": "number",
+        "minimum": 1,
+        "description": "영상에서 이 장을 보여 줄 초"
+       },
+       "제목": {
+        "type": "string",
+        "description": "제목 (한 줄 28자 안)"
+       },
+       "표": {
+        "type": "string",
+        "description": "표 경로(재료/NNN_이름/표/<이름>.json)"
+       },
+       "설명": {
+        "type": "string",
+        "description": "설명 (한 줄 60자 안)"
+       }
+      },
+      "required": [
+       "종류",
+       "제목"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "title": "목차",
+      "description": "오늘 이야기할 순서",
+      "type": "object",
+      "properties": {
+       "종류": {
+        "const": "목차"
+       },
+       "노트": {
+        "type": "string",
+        "description": "발표자 노트(대본.md에 모인다)"
+       },
+       "시간": {
+        "type": "number",
+        "minimum": 1,
+        "description": "영상에서 이 장을 보여 줄 초"
+       },
+       "제목": {
+        "type": "string",
+        "description": "제목 (한 줄 28자 안)"
+       },
+       "항목": {
+        "description": "항목 (한 줄 30자 안), 6줄까지",
+        "anyOf": [
+         {
+          "type": "array",
+          "items": {
+           "type": "string"
+          }
+         },
+         {
+          "type": "string"
+         }
+        ]
+       }
+      },
+      "required": [
+       "종류",
+       "제목",
+       "항목"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "title": "비교",
+      "description": "둘을 나란히: 전·후, A·B",
+      "type": "object",
+      "properties": {
+       "종류": {
+        "const": "비교"
+       },
+       "노트": {
+        "type": "string",
+        "description": "발표자 노트(대본.md에 모인다)"
+       },
+       "시간": {
+        "type": "number",
+        "minimum": 1,
+        "description": "영상에서 이 장을 보여 줄 초"
+       },
+       "제목": {
+        "type": "string",
+        "description": "제목 (한 줄 28자 안)"
+       },
+       "왼제목": {
+        "type": "string",
+        "description": "왼제목 (한 줄 16자 안)"
+       },
+       "왼글": {
+        "description": "왼글 (한 줄 30자 안), 4줄까지",
+        "anyOf": [
+         {
+          "type": "array",
+          "items": {
+           "type": "string"
+          }
+         },
+         {
+          "type": "string"
+         }
+        ]
+       },
+       "왼그림": {
+        "type": "string",
+        "description": "그림 경로(프로젝트 폴더 기준, 예: 재료/003_SEM/그림/SEM.tif)"
+       },
+       "오른제목": {
+        "type": "string",
+        "description": "오른제목 (한 줄 16자 안)"
+       },
+       "오른글": {
+        "description": "오른글 (한 줄 30자 안), 4줄까지",
+        "anyOf": [
+         {
+          "type": "array",
+          "items": {
+           "type": "string"
+          }
+         },
+         {
+          "type": "string"
+         }
+        ]
+       },
+       "오른그림": {
+        "type": "string",
+        "description": "그림 경로(프로젝트 폴더 기준, 예: 재료/003_SEM/그림/SEM.tif)"
+       }
+      },
+      "required": [
+       "종류",
+       "제목",
+       "왼제목",
+       "오른제목"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "title": "숫자",
+      "description": "큰 숫자 1~4개로 말하기. 한 줄에 '값 | 설명'",
+      "type": "object",
+      "properties": {
+       "종류": {
+        "const": "숫자"
+       },
+       "노트": {
+        "type": "string",
+        "description": "발표자 노트(대본.md에 모인다)"
+       },
+       "시간": {
+        "type": "number",
+        "minimum": 1,
+        "description": "영상에서 이 장을 보여 줄 초"
+       },
+       "제목": {
+        "type": "string",
+        "description": "제목 (한 줄 28자 안)"
+       },
+       "숫자들": {
+        "description": "숫자들 (한 줄 30자 안), 4줄까지",
+        "anyOf": [
+         {
+          "type": "array",
+          "items": {
+           "type": "string"
+          }
+         },
+         {
+          "type": "string"
+         }
+        ]
+       }
+      },
+      "required": [
+       "종류",
+       "제목",
+       "숫자들"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "title": "흐름",
+      "description": "공정·단계를 화살표로(최대 6단계)",
+      "type": "object",
+      "properties": {
+       "종류": {
+        "const": "흐름"
+       },
+       "노트": {
+        "type": "string",
+        "description": "발표자 노트(대본.md에 모인다)"
+       },
+       "시간": {
+        "type": "number",
+        "minimum": 1,
+        "description": "영상에서 이 장을 보여 줄 초"
+       },
+       "제목": {
+        "type": "string",
+        "description": "제목 (한 줄 28자 안)"
+       },
+       "단계": {
+        "description": "단계 (한 줄 24자 안), 6줄까지",
+        "anyOf": [
+         {
+          "type": "array",
+          "items": {
+           "type": "string"
+          }
+         },
+         {
+          "type": "string"
+         }
+        ]
+       }
+      },
+      "required": [
+       "종류",
+       "제목",
+       "단계"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "title": "인용",
+      "description": "고객·문헌의 말 한 마디",
+      "type": "object",
+      "properties": {
+       "종류": {
+        "const": "인용"
+       },
+       "노트": {
+        "type": "string",
+        "description": "발표자 노트(대본.md에 모인다)"
+       },
+       "시간": {
+        "type": "number",
+        "minimum": 1,
+        "description": "영상에서 이 장을 보여 줄 초"
+       },
+       "인용": {
+        "type": "string",
+        "description": "인용 (한 줄 60자 안)"
+       },
+       "누가": {
+        "type": "string",
+        "description": "누가 (한 줄 30자 안)"
+       }
+      },
+      "required": [
+       "종류",
+       "인용"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "title": "사진가득",
+      "description": "사진 한 장을 꽉 차게, 아래에 제목",
+      "type": "object",
+      "properties": {
+       "종류": {
+        "const": "사진가득"
+       },
+       "노트": {
+        "type": "string",
+        "description": "발표자 노트(대본.md에 모인다)"
+       },
+       "시간": {
+        "type": "number",
+        "minimum": 1,
+        "description": "영상에서 이 장을 보여 줄 초"
+       },
+       "그림": {
+        "type": "string",
+        "description": "그림 경로(프로젝트 폴더 기준, 예: 재료/003_SEM/그림/SEM.tif)"
+       },
+       "제목": {
+        "type": "string",
+        "description": "제목 (한 줄 28자 안)"
+       },
+       "글": {
+        "type": "string",
+        "description": "글 (한 줄 60자 안)"
+       },
+       "맞춤": {
+        "enum": [
+         "담기",
+         "채우기"
+        ],
+        "description": "맞춤"
+       }
+      },
+      "required": [
+       "종류",
+       "그림",
+       "제목"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "title": "결과해석",
+      "description": "큰 그림 + 핵심 수치 + 해석 한 줄",
+      "type": "object",
+      "properties": {
+       "종류": {
+        "const": "결과해석"
+       },
+       "노트": {
+        "type": "string",
+        "description": "발표자 노트(대본.md에 모인다)"
+       },
+       "시간": {
+        "type": "number",
+        "minimum": 1,
+        "description": "영상에서 이 장을 보여 줄 초"
+       },
+       "제목": {
+        "type": "string",
+        "description": "제목 (한 줄 28자 안)"
+       },
+       "그림": {
+        "type": "string",
+        "description": "그림 경로(프로젝트 폴더 기준, 예: 재료/003_SEM/그림/SEM.tif)"
+       },
+       "숫자들": {
+        "description": "숫자들 (한 줄 24자 안), 3줄까지",
+        "anyOf": [
+         {
+          "type": "array",
+          "items": {
+           "type": "string"
+          }
+         },
+         {
+          "type": "string"
+         }
+        ]
+       },
+       "해석": {
+        "type": "string",
+        "description": "해석 (한 줄 60자 안)"
+       }
+      },
+      "required": [
+       "종류",
+       "제목",
+       "해석"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "title": "사진격자",
+      "description": "SEM 같은 사진 2~6장을 나란히(자르지 않아 스케일바가 남아요)",
+      "type": "object",
+      "properties": {
+       "종류": {
+        "const": "사진격자"
+       },
+       "노트": {
+        "type": "string",
+        "description": "발표자 노트(대본.md에 모인다)"
+       },
+       "시간": {
+        "type": "number",
+        "minimum": 1,
+        "description": "영상에서 이 장을 보여 줄 초"
+       },
+       "제목": {
+        "type": "string",
+        "description": "제목 (한 줄 28자 안)"
+       },
+       "그림들": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        },
+        "maxItems": 6,
+        "description": "그림 경로 목록(누른 차례대로)"
+       },
+       "라벨들": {
+        "description": "라벨들 (한 줄 20자 안), 6줄까지",
+        "anyOf": [
+         {
+          "type": "array",
+          "items": {
+           "type": "string"
+          }
+         },
+         {
+          "type": "string"
+         }
+        ]
+       }
+      },
+      "required": [
+       "종류",
+       "제목",
+       "그림들"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "title": "결론",
+      "description": "결론과 다음 단계",
+      "type": "object",
+      "properties": {
+       "종류": {
+        "const": "결론"
+       },
+       "노트": {
+        "type": "string",
+        "description": "발표자 노트(대본.md에 모인다)"
+       },
+       "시간": {
+        "type": "number",
+        "minimum": 1,
+        "description": "영상에서 이 장을 보여 줄 초"
+       },
+       "제목": {
+        "type": "string",
+        "description": "제목 (한 줄 28자 안)"
+       },
+       "결론": {
+        "description": "결론 (한 줄 36자 안), 4줄까지",
+        "anyOf": [
+         {
+          "type": "array",
+          "items": {
+           "type": "string"
+          }
+         },
+         {
+          "type": "string"
+         }
+        ]
+       },
+       "다음": {
+        "description": "다음 (한 줄 24자 안), 4줄까지",
+        "anyOf": [
+         {
+          "type": "array",
+          "items": {
+           "type": "string"
+          }
+         },
+         {
+          "type": "string"
+         }
+        ]
+       }
+      },
+      "required": [
+       "종류",
+       "제목",
+       "결론"
+      ],
+      "additionalProperties": false
+     },
+     {
+      "title": "끝",
+      "description": "마지막 장. 감사 인사와 연락처",
+      "type": "object",
+      "properties": {
+       "종류": {
+        "const": "끝"
+       },
+       "노트": {
+        "type": "string",
+        "description": "발표자 노트(대본.md에 모인다)"
+       },
+       "시간": {
+        "type": "number",
+        "minimum": 1,
+        "description": "영상에서 이 장을 보여 줄 초"
+       },
+       "큰말": {
+        "type": "string",
+        "description": "큰말 (한 줄 20자 안)"
+       },
+       "작은말": {
+        "type": "string",
+        "description": "작은말 (한 줄 60자 안)"
+       }
+      },
+      "required": [
+       "종류"
+      ],
+      "additionalProperties": false
+     }
+    ]
+   }
+  }
+ }
+}
